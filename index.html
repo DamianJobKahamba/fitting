@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Damian Fitting</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>Damian Fitting</header>
+  <div class="container">
+    <h2>Upload Your Photos</h2>
+    <p>Upload a front and side photo of yourself (standing upright).</p>
+    <input type="file" accept="image/*" id="frontImage" /> <br />
+    <input type="file" accept="image/*" id="sideImage" /> <br />
+    <button onclick="processImages()">Get Measurements</button>
+
+    <div class="results" id="results" style="display: none">
+      <h3>Estimated Measurements:</h3>
+      <div class="measurement" id="shoulder"></div>
+      <div class="measurement" id="chest"></div>
+      <div class="measurement" id="waist"></div>
+      <div class="measurement" id="hip"></div>
+      <div class="measurement" id="shirtLength"></div>
+      <div class="measurement" id="armLength"></div>
+      <div class="measurement" id="neck"></div>
+      <div class="measurement" id="thigh"></div>
+      <div class="measurement" id="inseam"></div>
+      <div class="measurement" id="height"></div>
+    </div>
+  </div>
+
+  <script>
+    function processImages() {
+      // Fake sample data for now — in real application, use ML model here
+      const measurements = {
+        shoulder: '44 cm',
+        chest: '96 cm',
+        waist: '80 cm',
+        hip: '94 cm',
+        shirtLength: '68 cm',
+        armLength: '61 cm',
+        neck: '38 cm',
+        thigh: '56 cm',
+        inseam: '78 cm',
+        height: '175 cm'
+      };
+
+      document.getElementById('shoulder').innerText = `Shoulder Width: ${measurements.shoulder}`;
+      document.getElementById('chest').innerText = `Chest: ${measurements.chest}`;
+      document.getElementById('waist').innerText = `Waist: ${measurements.waist}`;
+      document.getElementById('hip').innerText = `Hip: ${measurements.hip}`;
+      document.getElementById('shirtLength').innerText = `Shirt Length: ${measurements.shirtLength}`;
+      document.getElementById('armLength').innerText = `Arm Length: ${measurements.armLength}`;
+      document.getElementById('neck').innerText = `Neck: ${measurements.neck}`;
+      document.getElementById('thigh').innerText = `Thigh: ${measurements.thigh}`;
+      document.getElementById('inseam').innerText = `Inseam: ${measurements.inseam}`;
+      document.getElementById('height').innerText = `Height: ${measurements.height}`;
+
+      document.getElementById('results').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
