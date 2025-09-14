@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Damian Fitting - Body Measurements (Prototype)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>Damian Fitting</h1>
+      <span class="tagline">Accurate Body Measurements (Prototype)</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <h2>Get Your Body Measurements</h2>
+          <p class="card-description">Upload four photos (front, right, left, back). This prototype estimates measurements and size fits and performs basic image quality checks and a heuristic bank‑card check for scale.</p>
+        </div>
+
+        <div class="tabs">
+          <div class="tabs-list">
+            <button class="tab-button active" data-tab="instructions">Instructions</button>
+            <button class="tab-button" data-tab="upload">Upload Photos</button>
+            <button class="tab-button" data-tab="results" disabled>Results</button>
+          </div>
+
+          <!-- Instructions Tab -->
+          <div class="tab-content active" id="instructions-content">
+            <div class="instructions-container">
+              <h3>How to Take Photos for Accurate Measurements</h3>
+
+              <div class="example-photos four-col">
+                <div class="example-photo">
+                  <h4>Front Photo</h4>
+                  <div class="photo-container">
+                    <img src="https://placehold.co/300x400/e2e8f0/1e293b?text=Example+Front+Photo" alt="Front photo example" />
+                  </div>
+                  <ul class="photo-tips">
+                    <li>Stand straight, feet shoulder‑width apart</li>
+                    <li>Arms slightly away from body</li>
+                    <li>Wear form‑fitting clothes</li>
+                    <li>Ensure full body is visible (head to feet)</li>
+                  </ul>
+                </div>
+
+                <div class="example-photo">
+                  <h4>Right Photo</h4>
+                  <div class="photo-container">
+                    <img src="https://placehold.co/300x400/e2e8f0/1e293b?text=Example+Right+Photo" alt="Right photo example" />
+                  </div>
+                  <ul class="photo-tips">
+                    <li>Right side to camera</li>
+                    <li>Keep your back straight</li>
+                    <li>Arms at your sides</li>
+                  </ul>
+                </div>
+
+                <div class="example-photo">
+                  <h4>Left Photo</h4>
+                  <div class="photo-container">
+                    <img src="https://placehold.co/300x400/e2e8f0/1e293b?text=Example+Left+Photo" alt="Left photo example" />
+                  </div>
+                  <ul class="photo-tips">
+                    <li>Left side to camera</li>
+                    <li>Keep your back straight</li>
+                    <li>Arms at your sides</li>
+                  </ul>
+                </div>
+
+                <div class="example-photo">
+                  <h4>Back Photo</h4>
+                  <div class="photo-container">
+                    <img src="https://placehold.co/300x400/e2e8f0/1e293b?text=Example+Back+Photo" alt="Back photo example" />
+                  </div>
+                  <ul class="photo-tips">
+                    <li>Stand straight facing away</li>
+                    <li>Arms relaxed</li>
+                    <li>Full body visible</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="alert info-alert">
+                <i class="fas fa-credit-card"></i>
+                <div class="alert-content">
+                  <h4>Use a standard bank card for scale</h4>
+                  <p>For accuracy, hold a standard bank/ID card (ISO ID‑1: 85.60 × 53.98 mm) on your chest in the <strong>front</strong> photo. Keep it flat and fully visible. The app will check for a card‑shaped rectangle and use it as a scaling reference.</p>
+                </div>
+              </div>
+
+              <div class="alert info-alert">
+                <i class="fas fa-lightbulb"></i>
+                <div class="alert-content">
+                  <h4>Quality scoring (accepted even if poor)</h4>
+                  <p>Each uploaded photo is scored (0–100%) for <em>Lighting</em>, <em>Contrast</em>, <em>Blur/Sharpness</em>, <em>Exposure</em>, and <em>Angle</em>. Scores below <strong>80%</strong> are marked <span class="badge badge-poor">Poor</span> with suggestions; above that are <span class="badge badge-good">Good</span>. Uploads are <strong>always accepted</strong>—the scores are guidance only.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Upload Tab -->
+          <div class="tab-content" id="upload-content">
+            <div class="upload-container">
+              <div class="upload-photos four-col">
+                <div class="upload-photo">
+                  <label>Front Photo <span class="status-chip" id="card-status-front">Card: —</span></label>
+                  <div class="upload-area" id="front-upload-area">
+                    <div class="upload-placeholder" id="front-placeholder">
+                      <i class="fas fa-upload"></i>
+                      <p>Click to upload or drag and drop</p>
+                    </div>
+                    <div class="image-preview" id="front-preview">
+                      <img id="front-image-preview" src="/placeholder.svg" alt="Front view preview" />
+                    </div>
+                    <input type="file" accept="image/*" id="frontImage" class="file-input" />
+                  </div>
+
+                  <div class="quality-panel">
+                    <table class="quality-table" id="quality-front"></table>
+                  </div>
+                </div>
+
+                <div class="upload-photo">
+                  <label>Right Photo <span class="status-chip" id="card-status-right">Card: —</span></label>
+                  <div class="upload-area" id="right-upload-area">
+                    <div class="upload-placeholder" id="right-placeholder">
+                      <i class="fas fa-upload"></i>
+                      <p>Click to upload or drag and drop</p>
+                    </div>
+                    <div class="image-preview" id="right-preview">
+                      <img id="right-image-preview" src="/placeholder.svg" alt="Right view preview" />
+                    </div>
+                    <input type="file" accept="image/*" id="rightImage" class="file-input" />
+                  </div>
+
+                  <div class="quality-panel">
+                    <table class="quality-table" id="quality-right"></table>
+                  </div>
+                </div>
+
+                <div class="upload-photo">
+                  <label>Left Photo <span class="status-chip" id="card-status-left">Card: —</span></label>
+                  <div class="upload-area" id="left-upload-area">
+                    <div class="upload-placeholder" id="left-placeholder">
+                      <i class="fas fa-upload"></i>
+                      <p>Click to upload or drag and drop</p>
+                    </div>
+                    <div class="image-preview" id="left-preview">
+                      <img id="left-image-preview" src="/placeholder.svg" alt="Left view preview" />
+                    </div>
+                    <input type="file" accept="image/*" id="leftImage" class="file-input" />
+                  </div>
+
+                  <div class="quality-panel">
+                    <table class="quality-table" id="quality-left"></table>
+                  </div>
+                </div>
+
+                <div class="upload-photo">
+                  <label>Back Photo <span class="status-chip" id="card-status-back">Card: —</span></label>
+                  <div class="upload-area" id="back-upload-area">
+                    <div class="upload-placeholder" id="back-placeholder">
+                      <i class="fas fa-upload"></i>
+                      <p>Click to upload or drag and drop</p>
+                    </div>
+                    <div class="image-preview" id="back-preview">
+                      <img id="back-image-preview" src="/placeholder.svg" alt="Back view preview" />
+                    </div>
+                    <input type="file" accept="image/*" id="backImage" class="file-input" />
+                  </div>
+
+                  <div class="quality-panel">
+                    <table class="quality-table" id="quality-back"></table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="button-container">
+                <button id="process-button" class="primary-button" disabled>
+                  <i class="fas fa-ruler"></i> Get Measurements
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results Tab -->
+          <div class="tab-content" id="results-content">
+            <div class="results-container">
+              <h3>Your Estimated Measurements</h3>
+
+              <div class="selectors">
+                <div class="selector">
+                  <label for="garment">Garment Type</label>
+                  <select id="garment">
+                    <option value="shirt">Shirt</option>
+                    <option value="trouser">Trouser</option>
+                  </select>
+                </div>
+                <div class="selector">
+                  <label for="region">Size Region</label>
+                  <select id="region">
+                    <option value="africa">Africa</option>
+                    <option value="europe">Europe</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="measurements-grid">
+                <div class="measurement-item"><span class="measurement-label">Shoulder Width</span><span class="measurement-value" id="shoulder"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Chest</span><span class="measurement-value" id="chest"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Waist</span><span class="measurement-value" id="waist"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Hip</span><span class="measurement-value" id="hip"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Shirt Length</span><span class="measurement-value" id="shirtLength"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Arm Length</span><span class="measurement-value" id="armLength"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Neck</span><span class="measurement-value" id="neck"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Thigh</span><span class="measurement-value" id="thigh"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Inseam</span><span class="measurement-value" id="inseam"></span></div>
+                <div class="measurement-item"><span class="measurement-label">Height</span><span class="measurement-value" id="height"></span></div>
+              </div>
+
+              <div class="fit-results">
+                <h4>Fit Suggestions</h4>
+                <div class="fit-row"><span>Small</span> <span class="fit-badge" id="fit-small">—</span></div>
+                <div class="fit-row"><span>Medium</span> <span class="fit-badge" id="fit-medium">—</span></div>
+                <div class="fit-row"><span>Large</span> <span class="fit-badge" id="fit-large">—</span></div>
+              </div>
+
+              <details class="estimation-notes">
+                <summary>Process of estimation explained</summary>
+                <ol>
+                  <li>We attempt to detect a bank‑card‑shaped rectangle in the <em>front</em> photo. If detected, its known width (85.60 mm) provides a pixel‑to‑mm scale.</li>
+                  <li>We estimate body landmarks (prototype approximation) and compute key measurements.</li>
+                  <li>We compare your measurements against size charts for the selected garment and region (S/M/L) and compute a percentage fit based on how close each required measurement is.</li>
+                  <li>Photo quality scores do not block processing; they simply guide you to retake if needed.</li>
+                </ol>
+              </details>
+
+              <div class="alert success-alert">
+                <i class="fas fa-info-circle"></i>
+                <div class="alert-content">
+                  <h4>Prototype accuracy note</h4>
+                  <p>This is a front‑end prototype using heuristic image analysis and synthetic estimation. For production‑grade accuracy, integrate calibrated distance cues and a proper pose/card detection model.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="current-year"></span> Damian Fitting. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // --------- Utilities ---------
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    const pct = (v) => `${Math.round(v)}%`;
+
+    // --------- Tabs ---------
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`${btn.dataset.tab}-content`).classList.add('active');
+      });
+    });
+
+    // Footer year
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    // --------- Image handling ---------
+    const inputs = {
+      front: document.getElementById('frontImage'),
+      right: document.getElementById('rightImage'),
+      left:  document.getElementById('leftImage'),
+      back:  document.getElementById('backImage')
+    };
+
+    const previews = {
+      front: document.getElementById('front-preview'),
+      right: document.getElementById('right-preview'),
+      left:  document.getElementById('left-preview'),
+      back:  document.getElementById('back-preview')
+    };
+
+    const placeholders = {
+      front: document.getElementById('front-placeholder'),
+      right: document.getElementById('right-placeholder'),
+      left:  document.getElementById('left-placeholder'),
+      back:  document.getElementById('back-placeholder')
+    };
+
+    const imgEls = {
+      front: document.getElementById('front-image-preview'),
+      right: document.getElementById('right-image-preview'),
+      left:  document.getElementById('left-image-preview'),
+      back:  document.getElementById('back-image-preview')
+    };
+
+    const qualityTables = {
+      front: document.getElementById('quality-front'),
+      right: document.getElementById('quality-right'),
+      left:  document.getElementById('quality-left'),
+      back:  document.getElementById('quality-back')
+    };
+
+    const cardStatusEls = {
+      front: document.getElementById('card-status-front'),
+      right: document.getElementById('card-status-right'),
+      left:  document.getElementById('card-status-left'),
+      back:  document.getElementById('card-status-back')
+    };
+
+    // Click to open file dialog
+    document.getElementById('front-upload-area').addEventListener('click', () => inputs.front.click());
+    document.getElementById('right-upload-area').addEventListener('click', () => inputs.right.click());
+    document.getElementById('left-upload-area').addEventListener('click', () => inputs.left.click());
+    document.getElementById('back-upload-area').addEventListener('click', () => inputs.back.click());
+
+    // Handle changes
+    for (const key of Object.keys(inputs)) {
+      inputs[key].addEventListener('change', function(){ handleImageUpload(key, this.files?.[0]); });
+    }
+
+    function handleImageUpload(position, file){
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imgEls[position].src = e.target.result;
+        previews[position].style.display = 'block';
+        placeholders[position].style.display = 'none';
+        // Analyze quality + attempt card detection
+        setTimeout(() => analyzeAndRender(position, imgEls[position]), 50);
+        checkEnableProcessButton();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function checkEnableProcessButton(){
+      const processButton = document.getElementById('process-button');
+      const ready = Object.values(inputs).every(inp => inp.files && inp.files.length > 0);
+      processButton.disabled = !ready;
+    }
+
+    // --------- Quality analysis + card heuristic detection ---------
+    async function analyzeAndRender(position, imgEl){
+      const {metrics, hints} = await analyzeImage(imgEl);
+      renderQualityTable(qualityTables[position], metrics, hints);
+
+      const card = await detectCardHeuristic(imgEl);
+      renderCardStatus(cardStatusEls[position], card.detected);
+      if (position === 'front' && card.detected) {
+        window.__cardScalePxPerMM = card.pxPerMM; // save scale estimate globally when found
+      }
+    }
+
+    function renderQualityTable(tableEl, metrics, hints){
+      const rows = [
+        ['Lighting', metrics.lighting],
+        ['Contrast', metrics.contrast],
+        ['Blur / Sharpness', metrics.sharpness],
+        ['Exposure', metrics.exposure],
+        ['Angle', metrics.angle]
+      ].map(([label, value]) => {
+        const good = value >= 80;
+        return `<tr><td>${label}</td><td><span class="badge ${good? 'badge-good':'badge-poor'}">${pct(value)}</span></td></tr>`;
+      }).join('');
+
+      const tips = hints.length ? `<tr class="hints"><td colspan="2"><i class="fa-solid fa-lightbulb"></i> ${hints.join(' • ')}</td></tr>` : '';
+      tableEl.innerHTML = `<tbody>${rows}${tips}</tbody>`;
+    }
+
+    function renderCardStatus(el, ok){
+      el.textContent = ok ? 'Card: OK' : 'Card: Not OK';
+      el.classList.remove('ok','notok');
+      el.classList.add(ok ? 'ok' : 'notok');
+    }
+
+    function analyzeImage(imgEl){
+      return new Promise(resolve => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const W = 320; // downscale for speed
+        const ratio = imgEl.naturalHeight / imgEl.naturalWidth;
+        const H = Math.max(1, Math.round(W * ratio));
+        canvas.width = W; canvas.height = H;
+        ctx.drawImage(imgEl, 0, 0, W, H);
+        const {data} = ctx.getImageData(0,0,W,H);
+
+        // luminance stats
+        let sum=0, sum2=0, n=W*H, clippedDark=0, clippedBright=0;
+        for(let i=0;i<data.length;i+=4){
+          const y = 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
+          sum += y; sum2 += y*y;
+          if (y < 5) clippedDark++; else if (y > 250) clippedBright++;
+        }
+        const mean = sum/n; const variance = sum2/n - mean*mean; const std = Math.sqrt(Math.max(0, variance));
+
+        // Sobel edges
+        const gray = new Float32Array(W*H);
+        for(let i=0, p=0;i<data.length;i+=4, p++) gray[p] = 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
+        const gx = new Float32Array(W*H), gy = new Float32Array(W*H);
+        const sobelAt=(x,y)=>{
+          const idx=(x,y)=>y*W+x;
+          const get=(x,y)=> gray[clampIndex(x,y)]
+          function clampIndex(x,y){x=Math.max(0,Math.min(W-1,x));y=Math.max(0,Math.min(H-1,y));return y*W+x;}
+          const a=get(x-1,y-1), b=get(x,y-1), c=get(x+1,y-1);
+          const d=get(x-1,y),   e=get(x,y),   f=get(x+1,y);
+          const g=get(x-1,y+1), h=get(x,y+1), i=get(x+1,y+1);
+          const Gx = -a + c - 2*d + 2*f - g + i;
+          const Gy = -a - 2*b - c + g + 2*h + i;
+          return [Gx, Gy];
+        };
+        let edgeCount=0, sumOrientX=0, sumOrientY=0;
+        for(let y=1;y<H-1;y++){
+          for(let x=1;x<W-1;x++){
+            const [sx,sy] = sobelAt(x,y);
+            gx[y*W+x]=sx; gy[y*W+x]=sy;
+            const mag = Math.hypot(sx,sy);
+            if (mag>50){ // edge threshold
+              edgeCount++;
+              sumOrientX += sx; sumOrientY += sy;
+            }
+          }
+        }
+
+        // Laplacian variance (blur metric)
+        const lapVar = (()=>{
+          let acc=0, acc2=0, count=0;
+          for(let y=1;y<H-1;y++){
+            for(let x=1;x<W-1;x++){
+              const i=y*W+x;
+              const lap = -4*gray[i] + gray[i-1] + gray[i+1] + gray[i-W] + gray[i+W];
+              acc += lap; acc2 += lap*lap; count++;
+            }
+          }
+          const m = acc/count; const v = acc2/count - m*m; return Math.max(0, v);
+        })();
+
+        // Map metrics to percentages
+        const lighting = clamp((mean/128)*100, 0, 100);
+        const contrast = clamp((std/64)*100, 0, 100); // std ~64 good
+        const sharpness = clamp((lapVar/500)*100, 0, 100); // tune threshold
+        const exposure = clamp(100 - ((clippedDark+clippedBright)/(W*H))*200, 0, 100);
+        // orientation: closer to horizontal/vertical dominant edges is better (assume camera level)
+        const angleRad = Math.atan2(sumOrientY, sumOrientX);
+        let angleDeg = Math.abs(angleRad*180/Math.PI);
+        if (isNaN(angleDeg)) angleDeg = 0;
+        const angleFromAxis = Math.min(angleDeg % 90, 90 - (angleDeg % 90));
+        const anglePct = clamp(100 - (angleFromAxis/20)*100, 0, 100); // within ~±20° seen as OK
+
+        const metrics = { lighting, contrast, sharpness, exposure, angle: anglePct };
+
+        const hints = [];
+        if (lighting < 80) hints.push('Increase lighting or move near a window');
+        if (contrast < 80) hints.push('Use a plain background with better contrast');
+        if (sharpness < 80) hints.push('Hold still or increase camera focus / avoid blur');
+        if (exposure < 80) hints.push('Avoid extreme shadows/highlights');
+        if (anglePct < 80) hints.push('Level the camera; avoid tilted shots');
+
+        resolve({metrics, hints});
+      });
+    }
+
+    function detectCardHeuristic(imgEl){
+      return new Promise(resolve => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const W = 320; const ratio = imgEl.naturalHeight / imgEl.naturalWidth; const H = Math.max(1, Math.round(W * ratio));
+        canvas.width = W; canvas.height = H; ctx.drawImage(imgEl, 0,0,W,H);
+        const {data} = ctx.getImageData(0,0,W,H);
+
+        // Threshold edges using Sobel magnitude
+        const gray = new Float32Array(W*H);
+        for(let i=0,p=0;i<data.length;i+=4,p++) gray[p] = 0.2126*data[i] + 0.7152*data[i+1] + 0.0722*data[i+2];
+        const edges = new Uint8ClampedArray(W*H);
+        const idx=(x,y)=>y*W+x;
+        const g = (x,y)=> gray[Math.max(0,Math.min(W-1,x)) + Math.max(0,Math.min(H-1,y))*W];
+        for(let y=1;y<H-1;y++){
+          for(let x=1;x<W-1;x++){
+            const Gx = -g(x-1,y-1)+g(x+1,y-1)-2*g(x-1,y)+2*g(x+1,y)-g(x-1,y+1)+g(x+1,y+1);
+            const Gy = -g(x-1,y-1)-2*g(x,y-1)-g(x+1,y-1)+g(x-1,y+1)+2*g(x,y+1)+g(x+1,y+1);
+            const mag = Math.hypot(Gx,Gy);
+            edges[idx(x,y)] = mag>80 ? 255 : 0;
+          }
+        }
+
+        // Scan windows to find a rectangle-like region with aspect ratio near 1.586
+        let best = null;
+        const aspectTarget = 85.60/53.98; // ~1.586
+        for(let h=H; h>=H*0.15; h=Math.round(h*0.9)){
+          const w = Math.round(h*aspectTarget);
+          if (w>W) continue;
+          for(let y=0; y<=H-h; y+=8){
+            for(let x=0; x<=W-w; x+=8){
+              // Edge density on the border of the window
+              let borderEdge=0, borderPix=0;
+              for(let i=0;i<w;i++){ borderPix++; if(edges[idx(x+i,y)]===255) borderEdge++; borderPix++; if(edges[idx(x+i,y+h-1)]===255) borderEdge++; }
+              for(let j=0;j<h;j++){ borderPix++; if(edges[idx(x,y+j)]===255) borderEdge++; borderPix++; if(edges[idx(x+w-1,y+j)]===255) borderEdge++; }
+              const edgeFrac = borderEdge / Math.max(1,borderPix);
+              if (edgeFrac>0.35){ // heuristically strong rectangle border
+                const area = w*h;
+                if (!best || area > best.area){ best = {x,y,w,h,edgeFrac}; }
+              }
+            }
+          }
+        }
+        if (best){
+          // px per mm using width
+          const pxPerMM = best.w / 85.60; // pixels per mm
+          resolve({detected:true, pxPerMM});
+        } else {
+          resolve({detected:false});
+        }
+      });
+    }
+
+    // --------- Sizing logic ---------
+    const sizeCharts = {
+      shirt: {
+        africa: {
+          Small:  { neck: 37, chest: 92, waist: 82, sleeve: 60, length: 70, shoulder: 43 },
+          Medium: { neck: 39, chest: 100, waist: 90, sleeve: 62, length: 73, shoulder: 45 },
+          Large:  { neck: 41, chest: 108, waist: 98, sleeve: 64, length: 76, shoulder: 47 }
+        },
+        europe: {
+          Small:  { neck: 38, chest: 96, waist: 86, sleeve: 61, length: 71, shoulder: 44 },
+          Medium: { neck: 40, chest: 104, waist: 94, sleeve: 63, length: 74, shoulder: 46 },
+          Large:  { neck: 42, chest: 112, waist: 102, sleeve: 65, length: 77, shoulder: 48 }
+        }
+      },
+      trouser: {
+        africa: {
+          Small:  { waist: 76, hip: 94, thigh: 55, inseam: 78, outseam: 104 },
+          Medium: { waist: 84, hip: 102, thigh: 58, inseam: 80, outseam: 106 },
+          Large:  { waist: 92, hip: 110, thigh: 61, inseam: 82, outseam: 108 }
+        },
+        europe: {
+          Small:  { waist: 78, hip: 96, thigh: 56, inseam: 78, outseam: 105 },
+          Medium: { waist: 86, hip: 104, thigh: 59, inseam: 80, outseam: 107 },
+          Large:  { waist: 94, hip: 112, thigh: 62, inseam: 82, outseam: 109 }
+        }
+      }
+    };
+
+    function getSelectedChart(){
+      const garment = document.getElementById('garment').value; // 'shirt' | 'trouser'
+      const region = document.getElementById('region').value;   // 'africa' | 'europe'
+      return { garment, region, chart: sizeCharts[garment][region] };
+    }
+
+    // --------- Measurement estimation (prototype) ---------
+    function estimateMeasurements(){
+      // If card scale available, adjust baseline; otherwise use baseline 175cm
+      const baseHeight = 175; // cm
+      let height = baseHeight + Math.floor(Math.random()*10) - 5;
+      if (window.__cardScalePxPerMM){
+        // crude adjustment: treat detection as confidence boost only
+        height += 2; // nudge for demonstration
+      }
+
+      const shoulderWidth = Math.round(height * 0.25 + Math.random()*4 - 2);
+      const chest        = Math.round(height * 0.55 + Math.random()*6 - 3);
+      const waist        = Math.round(height * 0.45 + Math.random()*6 - 3);
+      const hip          = Math.round(height * 0.53 + Math.random()*6 - 3);
+      const shirtLength  = Math.round(height * 0.38 + Math.random()*4 - 2);
+      const armLength    = Math.round(height * 0.35 + Math.random()*4 - 2);
+      const neck         = Math.round(height * 0.22 + Math.random()*3 - 1.5);
+      const thigh        = Math.round(height * 0.32 + Math.random()*4 - 2);
+      const inseam       = Math.round(height * 0.45 + Math.random()*4 - 2);
+
+      return {height, shoulderWidth, chest, waist, hip, shirtLength, armLength, neck, thigh, inseam};
+    }
+
+    function renderMeasurements(m){
+      document.getElementById('shoulder').textContent = `${m.shoulderWidth} cm`;
+      document.getElementById('chest').textContent    = `${m.chest} cm`;
+      document.getElementById('waist').textContent    = `${m.waist} cm`;
+      document.getElementById('hip').textContent      = `${m.hip} cm`;
+      document.getElementById('shirtLength').textContent = `${m.shirtLength} cm`;
+      document.getElementById('armLength').textContent   = `${m.armLength} cm`;
+      document.getElementById('neck').textContent     = `${m.neck} cm`;
+      document.getElementById('thigh').textContent    = `${m.thigh} cm`;
+      document.getElementById('inseam').textContent   = `${m.inseam} cm`;
+      document.getElementById('height').textContent   = `${m.height} cm`;
+    }
+
+    function computeFitPercentages(m){
+      const {garment, region, chart} = getSelectedChart();
+      const sizes = Object.keys(chart); // Small/Medium/Large
+      const results = {};
+      for(const size of sizes){
+        const spec = chart[size];
+        const diffs = [];
+        if (garment==='shirt'){
+          diffs.push(relDiff(m.neck, spec.neck));
+          diffs.push(relDiff(m.chest, spec.chest));
+          diffs.push(relDiff(m.waist, spec.waist));
+          diffs.push(relDiff(m.armLength, spec.sleeve));
+          diffs.push(relDiff(m.shirtLength, spec.length));
+          diffs.push(relDiff(m.shoulderWidth, spec.shoulder));
+        } else {
+          diffs.push(relDiff(m.waist, spec.waist));
+          diffs.push(relDiff(m.hip, spec.hip));
+          diffs.push(relDiff(m.thigh, spec.thigh));
+          diffs.push(relDiff(m.inseam, spec.inseam));
+          // we don't estimate outseam explicitly, derive from height as proxy
+          const outseamEst = Math.round(m.height * 0.62);
+          diffs.push(relDiff(outseamEst, spec.outseam));
+        }
+        const avgDiff = diffs.reduce((a,b)=>a+b,0)/diffs.length; // 0 = perfect
+        const fit = clamp(100 - avgDiff*100, 0, 100); // map to 0..100
+        results[size] = Math.round(fit);
+      }
+      return results;
+
+      function relDiff(a,b){ return Math.abs(a-b) / Math.max(1,b); }
+    }
+
+    function renderFitBadges(fits){
+      const s = document.getElementById('fit-small');
+      const m = document.getElementById('fit-medium');
+      const l = document.getElementById('fit-large');
+      s.textContent = `${fits.Small}%`; s.className = 'fit-badge ' + (fits.Small>=80?'good':'poor');
+      m.textContent = `${fits.Medium}%`; m.className = 'fit-badge ' + (fits.Medium>=80?'good':'poor');
+      l.textContent = `${fits.Large}%`; l.className = 'fit-badge ' + (fits.Large>=80?'good':'poor');
+    }
+
+    // Recompute fits when selectors change
+    document.getElementById('garment').addEventListener('change', ()=>{
+      if (window.__lastMeasurements){ renderFitBadges(computeFitPercentages(window.__lastMeasurements)); }
+    });
+    document.getElementById('region').addEventListener('change', ()=>{
+      if (window.__lastMeasurements){ renderFitBadges(computeFitPercentages(window.__lastMeasurements)); }
+    });
+
+    // --------- Process button ---------
+    document.getElementById('process-button').addEventListener('click', ()=>{
+      const m = estimateMeasurements();
+      window.__lastMeasurements = m;
+      renderMeasurements(m);
+      renderFitBadges(computeFitPercentages(m));
+      const resultsTabButton = document.querySelector('[data-tab="results"]');
+      resultsTabButton.disabled = false; resultsTabButton.click();
+    });
+  </script>
+</body>
+</html>
